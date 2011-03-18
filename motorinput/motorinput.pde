@@ -65,12 +65,12 @@ void backward() {
 }
 
 void left(int degree) {
- turn(leftWheelSpeedPin, leftWheelDirectionPin, rightWheelSpeedPin, rightWheelDirectionPin, degree);
+ turn(rightWheelSpeedPin, rightWheelDirectionPin, leftWheelSpeedPin, leftWheelDirectionPin, degree);
 } 
 
 
 void right(int degree) {
-  turn(rightWheelSpeedPin, rightWheelDirectionPin, leftWheelSpeedPin, leftWheelDirectionPin, degree);
+  turn(leftWheelSpeedPin, leftWheelDirectionPin, rightWheelSpeedPin, rightWheelDirectionPin, degree);
 }
 
 void turn(int backSpeed, int backDirection, int fwdSpeed, int fwdDirection, int degree) {
