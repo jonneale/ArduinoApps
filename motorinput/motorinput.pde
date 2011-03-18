@@ -29,16 +29,16 @@ void loop()
   if (val == 'b') {
     backward();
   } 
-  if (val == 'ls') {
+  if (val == 'l') {
     left(45);
   }
-  if (val == 'rs') {
+  if (val == 'r') {
     right(45);
   }   
-  if (val == 'lb') {
+  if (val == 'a') {
     left(90);
   }   
-    if (val == 'rb') {
+    if (val == 'c') {
     right(90);
   }   
   stop();
@@ -65,26 +65,20 @@ void backward() {
 }
 
 void left(int degree) {
-  digitalWrite (leftWheelDirectionPin, back); 
-  digitalWrite (rightWheelDirectionPin, fwd);
-  analogWrite (leftWheelSpeedPin, 255);
-  analogWrite (rightWheelSpeedPin, 255);
-  delay(200);
+ turn(leftWheelSpeedPin, leftWheelDirectionPin, rightWheelSpeedPin, rightWheelDirectionPin, degree);
 } 
 
 void right(int degree) {
-   digitalWrite (leftWheelDirectionPin, fwd); 
-  digitalWrite (rightWheelDirectionPin, back);
-  analogWrite (leftWheelSpeedPin, 255);
-  analogWrite (rightWheelSpeedPin, 255);
+  turn(rightWheelSpeedPin, rightWheelDirectionPin, leftWheelSpeedPin, leftWheelDirectionPin, degree);
 }
+
 void turn(int backSpeed, int backDirection, int fwdSpeed, int fwdDirection, int degree) {
- // analogWrite (backSpeed, 0);
-  //if (degree == 90) {
+  analogWrite (backSpeed, 0);
+  if (degree == 90) {
     digitalWrite (backDirection, back);
     analogWrite (backSpeed, 255);
- // }
-  digitalWrite (fwdDirection, fwd);
+  }
+  digitalWrite (fwdDirection, back);
   analogWrite (fwdSpeed, 255);
   delay(200);
 } 
