@@ -68,6 +68,7 @@ void left(int degree) {
  turn(leftWheelSpeedPin, leftWheelDirectionPin, rightWheelSpeedPin, rightWheelDirectionPin, degree);
 } 
 
+
 void right(int degree) {
   turn(rightWheelSpeedPin, rightWheelDirectionPin, leftWheelSpeedPin, leftWheelDirectionPin, degree);
 }
@@ -78,7 +79,7 @@ void turn(int backSpeed, int backDirection, int fwdSpeed, int fwdDirection, int 
     digitalWrite (backDirection, back);
     analogWrite (backSpeed, 255);
   }
-  digitalWrite (fwdDirection, back);
+  digitalWrite (fwdDirection, fwd);
   analogWrite (fwdSpeed, 255);
   delay(200);
 } 
