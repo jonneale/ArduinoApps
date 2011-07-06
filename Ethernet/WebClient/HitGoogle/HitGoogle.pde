@@ -93,7 +93,6 @@ void loop()
         Serial.println("connecting...");
     
         EthernetDNS.setDNSServer(dnsAddr);
-        EthernetDNS.sendDNSQuery(hostName);
        
         DNSError err = EthernetDNS.sendDNSQuery(hostName);
         if (err == DNSSuccess) {
@@ -106,7 +105,8 @@ void loop()
           } while(err == DNSTryLater);
         }
         
-        
+        Serial.println("Ip address of server: ");
+        Serial.println(ip_to_str(resolvedIp));  
         Client client(resolvedIp, 80);
 
         
