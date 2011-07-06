@@ -12,9 +12,6 @@ void setup() {
 }
 
 void loop() {
-  s();
-  o();
-  s();
   pause();
   h();
   e();

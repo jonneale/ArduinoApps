@@ -38,9 +38,16 @@ void loop()
   if (val == 'a') {
     left(90);
   }   
-    if (val == 'c') {
+  if (val == 'c') {
     right(90);
-  }   
+  }
+  if (val == 's') {
+    spinLeft();
+  }
+  if (val == 'd') {
+    spinLeft();
+    spinRight();
+  } 
   stop();
 }
 
@@ -64,10 +71,26 @@ void backward() {
   delay(200);
 }
 
+void spinLeft() {
+  digitalWrite (leftWheelDirectionPin, back);
+  analogWrite (leftWheelSpeedPin, 255);
+  digitalWrite (rightWheelDirectionPin, fwd);
+  analogWrite (rightWheelSpeedPin, 255);
+  delay(1000);
+}
+
+
+void spinRight() {
+  digitalWrite (rightWheelDirectionPin, back);
+  analogWrite (rightWheelSpeedPin, 255);
+  digitalWrite (lefttWheelDirectionPin, fwd);
+  analogWrite (leftWheelSpeedPin, 255);
+  delay(1000);
+}
+
 void left(int degree) {
  turn(rightWheelSpeedPin, rightWheelDirectionPin, leftWheelSpeedPin, leftWheelDirectionPin, degree);
 } 
-
 
 void right(int degree) {
   turn(leftWheelSpeedPin, leftWheelDirectionPin, rightWheelSpeedPin, rightWheelDirectionPin, degree);

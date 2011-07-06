@@ -1,0 +1,11 @@
+{:new-payment-method "Monthly Direct Debit"
+                    :usage {:gas {:value 20500
+                                  :units "annual-consumption-kwh"}
+                            :electricity {:value 3000
+                                          :units "annual-consumption-kwh"}}
+                    :region-id 11
+                    :variant "Standard"
+                    :comparisons [:dual-fuel]
+                    :plan {:supplier-name-key "atlantic"
+                           :plan-name-key "atlantic-fixed-price-3"
+                           :fuel-type "dual-fuel"}}
