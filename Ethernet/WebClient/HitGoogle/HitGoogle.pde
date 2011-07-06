@@ -122,9 +122,12 @@ void loop()
         } else {
           Serial.println("connection failed");
         }
-     delay(1000); 
-
-  } else if (state != DhcpStateLeased && millis() - prevTime > 300) {
+       delay(1000); 
+       break;
+      }
+    } 
+  }
+   else if (state != DhcpStateLeased && millis() - prevTime > 300) {
      prevTime = millis();
      Serial.print('.'); 
   }
