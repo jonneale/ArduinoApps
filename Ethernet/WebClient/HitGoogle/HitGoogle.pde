@@ -1,3 +1,4 @@
+
 //  Copyright (C) 2010 Georg Kaindl
 //  http://gkaindl.com
 //
@@ -26,27 +27,20 @@
 #endif
 #include <Ethernet.h>
 #include <EthernetDHCP.h>
+#include <EthernetDNS.h>
 
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0x53, 0xC4 };
 
 const char* ip_to_str(const uint8_t*);
-byte server[] = { 74,125,232,51}; // Google
-Client client(server, 80);
+char hostName[] = "tariffeditor.uswitchinternal.com";
+byte resolvedIp[4];
+
 char inString[32]; // string for incoming serial data
 int stringPos = 0; // string index counter
 
 void setup()
 {
   Serial.begin(9600);
-  
-  // Initiate a DHCP session. The argument is the MAC (hardware) address that
-  // you want your Ethernet shield to use. The second argument enables polling
-  // mode, which means that this call will not block like in the
-  // SynchronousDHCP example, but will return immediately.
-  // Within your loop(), you can then poll the DHCP library for its status,
-  // finding out its state, so that you can tell when a lease has been
-  // obtained. You can even find out when the library is in the process of
-  // renewing your lease.
   EthernetDHCP.begin(mac, 1);
 }
 
@@ -80,9 +74,7 @@ void loop()
         break;
       case DhcpStateLeased: {
         Serial.println("Obtained lease!");
-
-        // Since we're here, it means that we now have a DHCP lease, so we
-        // print out some information.
+        
         const byte* ipAddr = EthernetDHCP.ipAddress();
         const byte* gatewayAddr = EthernetDHCP.gatewayIpAddress();
         const byte* dnsAddr = EthernetDHCP.dnsIpAddress();
@@ -99,23 +91,39 @@ void loop()
         Serial.println();
         
         Serial.println("connecting...");
-  
+    
+        EthernetDNS.setDNSServer(dnsAddr);
+        EthernetDNS.sendDNSQuery(hostName);
+       
+        DNSError err = EthernetDNS.sendDNSQuery(hostName);
+        if (err == DNSSuccess) {
+          do {
+            err = EthernetDNS.pollDNSReply(resolvedIp);
+            if (DNSTryLater == err) {
+              delay(20);
+              Serial.print(".");
+            }
+          } while(err == DNSTryLater);
+        }
+        
+        
+        Client client(resolvedIp, 80);
+
+        
         if (client.connect()) {
           Serial.println("connected");
-          client.println("GET /search?q=arduino HTTP/1.0");
+          client.println("GET /reporting/switches/count.json HTTP/1.0");
           client.println();
 
           //Connected - Read the page
-          Serial.println(readPage()); //go and read the output
+          Serial.println(readPage(client)); //go and read the output
           Serial.println("disconnecting.");
           Serial.println("all done");          
         } else {
           Serial.println("connection failed");
         }
-              
-        break;
-      }
-    }
+     delay(1000); 
+
   } else if (state != DhcpStateLeased && millis() - prevTime > 300) {
      prevTime = millis();
      Serial.print('.'); 
@@ -124,7 +132,7 @@ void loop()
   prevState = state;
 }
 
-String readPage(){
+String readPage(Client client){
   stringPos = 0;
   memset( &inString, 0, 32 ); //clear inString memory
   while(true){
